@@ -6,17 +6,28 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
-const initialPrayers = [
+interface Prayer {
+  id: number;
+  author: string;
+  content: string;
+}
+
+interface PrayerFormData {
+  author: string;
+  content: string;
+}
+
+const initialPrayers: Prayer[] = [
   { id: 1, author: "John D.", content: "Praying for strength and endurance in my upcoming marathon." },
   { id: 2, author: "Sarah M.", content: "Asking for healing for my injured knee." },
   { id: 3, author: "Michael R.", content: "Grateful for the supportive community of runners. Bless them all!" },
 ];
 
 export default function PrayerWallPage() {
-  const [prayers, setPrayers] = useState(initialPrayers);
-  const [newPrayer, setNewPrayer] = useState({ author: '', content: '' });
+  const [prayers, setPrayers] = useState<Prayer[]>(initialPrayers);
+  const [newPrayer, setNewPrayer] = useState<PrayerFormData>({ author: '', content: '' });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newPrayer.author && newPrayer.content) {
       setPrayers([...prayers, { id: prayers.length + 1, ...newPrayer }]);
@@ -37,12 +48,14 @@ export default function PrayerWallPage() {
             <Input
               placeholder="Your Name"
               value={newPrayer.author}
-              onChange={(e) => setNewPrayer({ ...newPrayer, author: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                setNewPrayer({ ...newPrayer, author: e.target.value })}
             />
             <Textarea
               placeholder="Your Prayer"
               value={newPrayer.content}
-              onChange={(e) => setNewPrayer({ ...newPrayer, content: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => 
+                setNewPrayer({ ...newPrayer, content: e.target.value })}
             />
             <Button type="submit">Submit Prayer</Button>
           </form>
