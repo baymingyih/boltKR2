@@ -12,6 +12,13 @@ import {
 } from '@/components/ui/sheet';
 import { usePathname } from 'next/navigation';
 
+interface NavLinkProps {
+  href: string;
+  label: string;
+  className?: string;
+  onClick?: () => void;
+}
+
 const Header = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
@@ -24,12 +31,13 @@ const Header = () => {
     { href: '/register', label: 'Register' },
   ];
 
-  const NavLink = ({ href, label, className = '' }: { href: string; label: string; className?: string }) => (
+  const NavLink: React.FC<NavLinkProps> = ({ href, label, className = '', onClick }) => (
     <Link
       href={href}
       className={`${className} ${
         pathname === href ? 'text-primary font-semibold' : 'text-foreground hover:text-primary'
       } transition-colors`}
+      onClick={onClick}
     >
       {label}
     </Link>
