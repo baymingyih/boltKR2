@@ -1,18 +1,13 @@
 "use client"
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
-interface Prayer {
+type Prayer = {
   id: number;
-  author: string;
-  content: string;
-}
-
-interface PrayerFormData {
   author: string;
   content: string;
 }
@@ -25,7 +20,7 @@ const initialPrayers: Prayer[] = [
 
 export default function PrayerWallPage() {
   const [prayers, setPrayers] = useState<Prayer[]>(initialPrayers);
-  const [newPrayer, setNewPrayer] = useState<PrayerFormData>({ author: '', content: '' });
+  const [newPrayer, setNewPrayer] = useState({ author: '', content: '' });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,6 +28,11 @@ export default function PrayerWallPage() {
       setPrayers([...prayers, { id: prayers.length + 1, ...newPrayer }]);
       setNewPrayer({ author: '', content: '' });
     }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setNewPrayer(prev => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -46,16 +46,16 @@ export default function PrayerWallPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
+              name="author"
               placeholder="Your Name"
               value={newPrayer.author}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                setNewPrayer({ ...newPrayer, author: e.target.value })}
+              onChange={handleInputChange}
             />
             <Textarea
+              name="content"
               placeholder="Your Prayer"
               value={newPrayer.content}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => 
-                setNewPrayer({ ...newPrayer, content: e.target.value })}
+              onChange={handleInputChange}
             />
             <Button type="submit">Submit Prayer</Button>
           </form>
